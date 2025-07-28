@@ -79,6 +79,7 @@ public class DatabaseArray {
 
         if (database[index].isEmpty()) {
             consoleIO.println(ERROR);
+            return;
         }
 
         consoleIO.println(database[index]);
