@@ -53,6 +53,9 @@ public class DatabaseArray {
      *                    commandLine[1] is the index commandLine[2] is the value to store
      */
     String set(String[] commandLine) {
+        if (commandLine.length != 3) {
+            return ERROR;
+        }
         var index = getIndex(commandLine[1]);
         if (index == -1) {
             return ERROR;
@@ -68,6 +71,9 @@ public class DatabaseArray {
      *                    commandLine[1] is the index
      */
     String get(String[] commandLine) {
+        if (commandLine.length != 2) {
+            return ERROR;
+        }
         var index = getIndex(commandLine[1]);
         if (index == -1) {
             return ERROR;
@@ -88,6 +94,9 @@ public class DatabaseArray {
      *                    commandLine[1] is the index
      */
     String delete(String[] commandLine) {
+        if (commandLine.length != 2) {
+            return ERROR;
+        }
         var index = getIndex(commandLine[1]);
         if (index == -1) {
             return ERROR;
@@ -105,7 +114,7 @@ public class DatabaseArray {
      *         or -1 if the key is invalid or out of range
      */
     int getIndex(String key) {
-        int index = -1;
+        int index;
         try {
             index = Integer.parseInt(key);
         } catch (NumberFormatException e) {
