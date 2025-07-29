@@ -1,7 +1,5 @@
 package server;
 
-import consoleio.ConsoleIO;
-
 import java.util.Arrays;
 
 /**
@@ -19,33 +17,33 @@ public class DatabaseArray {
     private static final String COMMAND_DELETE = "delete";
     private static final String COMMAND_EXIT = "exit";
 
-    private final ConsoleIO consoleIO;
     private final String[] database = new String[MAX_SIZE];
 
-
-    public DatabaseArray(ConsoleIO consoleIO) {
-        this.consoleIO = consoleIO;
+    public DatabaseArray() {
         Arrays.fill(database, "");
     }
 
     /**
-     * Starts the main command processing loop that handles user input. Continuously reads and processes commands until
-     * an exit command is received. Supported commands: set, get, delete, and exit.
+     * Parses and executes a command based on the given command line input. The method splits the input into components
+     * and determines the operation (set, get, or delete) to perform on the database. If the command is invalid,
+     * an error message is returned.
+     *
+     * @param commandLine the full command line string to be parsed and executed. The format of the command is as follows:
+     *                    - "set <index> <value>" to set a value at a specific index,
+     *                    - "get <index>" to retrieve a value from a specific index,
+     *                    - "delete <index>" to delete a value at a specific index.
+     * @return the result of the command execution as a string. Returns "OK" for successful operations,
+     *         "ERROR" for invalid commands or errors during execution.
      */
-    void commandLoop() {
-        var commandInput = "";
-        var exitLoop = false;
-        while (!exitLoop) {
-            commandInput = consoleIO.getUserInput();
-            var command = commandInput.split(" ", 3);
-            switch (command[0].toLowerCase()) {
-                case COMMAND_SET -> set(command);
-                case COMMAND_GET -> get(command);
-                case COMMAND_DELETE -> delete(command);
-                case COMMAND_EXIT -> exitLoop = true;
-                default -> consoleIO.println(ERROR);
-            }
-        }
+    public String parseCommandLine(final String commandLine) {
+        var command = commandLine.split(" ", 3);
+        return switch (command[0].toLowerCase()) {
+            case COMMAND_SET -> set(command);
+            case COMMAND_GET -> get(command);
+            case COMMAND_DELETE -> delete(command);
+            default -> ERROR;
+        };
+
     }
 
     /**
@@ -54,14 +52,13 @@ public class DatabaseArray {
      * @param commandLine array containing the command components where: commandLine[0] is the command name ("set")
      *                    commandLine[1] is the index commandLine[2] is the value to store
      */
-    void set(String[] commandLine) {
+    String set(String[] commandLine) {
         var index = getIndex(commandLine[1]);
         if (index == -1) {
-            consoleIO.println(ERROR);
-            return;
+            return ERROR;
         }
         database[index] = commandLine[2];
-        consoleIO.println(OK);
+        return OK;
     }
 
     /**
@@ -70,19 +67,17 @@ public class DatabaseArray {
      * @param commandLine array containing the command components where: commandLine[0] is the command name ("get")
      *                    commandLine[1] is the index
      */
-    void get(String[] commandLine) {
+    String get(String[] commandLine) {
         var index = getIndex(commandLine[1]);
         if (index == -1) {
-            consoleIO.println(ERROR);
-            return;
+            return ERROR;
         }
 
         if (database[index].isEmpty()) {
-            consoleIO.println(ERROR);
-            return;
+            return ERROR;
         }
 
-        consoleIO.println(database[index]);
+        return database[index];
     }
 
     /**
@@ -92,14 +87,13 @@ public class DatabaseArray {
      * @param commandLine array containing the command components where: commandLine[0] is the command name ("delete")
      *                    commandLine[1] is the index
      */
-    void delete(String[] commandLine) {
+    String delete(String[] commandLine) {
         var index = getIndex(commandLine[1]);
         if (index == -1) {
-            consoleIO.println(ERROR);
-            return;
+            return ERROR;
         }
         database[index] = "";
-        consoleIO.println(OK);
+        return OK;
     }
 
     /**
