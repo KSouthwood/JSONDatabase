@@ -23,10 +23,9 @@ public class Session extends Thread {
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream())
         ) {
             String command = input.readUTF();
+            output.writeUTF(databaseArray.parseCommandLine(command));
             if (command.equals("exit")) {
                 running.set(false);
-            } else {
-                output.writeUTF(databaseArray.parseCommandLine(command));
             }
             socket.close();
         } catch (IOException e) {

@@ -14,13 +14,13 @@ public class Client {
     private final int    port;
 
     @Parameter(names = "-t", description = "Request type (get, set, delete, exit)")
-    private final String request = "";
+    private String request = "";
 
     @Parameter(names = "-i", description = "Index of the record to operate on")
-    private final String index = "";
+    private String index = "";
 
     @Parameter(names = "-m", description = "Message to store on the server")
-    private final String message = "";
+    private String message = "";
 
     public Client(String address, int port) {
         this.address = address;

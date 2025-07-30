@@ -16,9 +16,12 @@ public class Main {
             {
                 Session session = new Session(socket.accept(), db, running);
                 session.start();
+                session.join();
             }
         } catch (IOException e) {
             System.err.println("Error starting server: " + e.getMessage());
+        } catch (InterruptedException e) {
+            System.err.println("Server interrupted: " + e.getMessage());
         }
     }
 }

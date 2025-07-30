@@ -41,9 +41,9 @@ public class DatabaseArray {
             case COMMAND_SET -> set(command);
             case COMMAND_GET -> get(command);
             case COMMAND_DELETE -> delete(command);
+            case COMMAND_EXIT -> OK;
             default -> ERROR;
         };
-
     }
 
     /**
