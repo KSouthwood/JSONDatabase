@@ -2,17 +2,26 @@ package server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main {
     private final static int SERVER_PORT = 23456;
 
     public static void main(String[] args) {
+        DatabaseArray db = new DatabaseArray();
         try (ServerSocket socket = new ServerSocket(SERVER_PORT)) {
             System.out.println("Server started!");
-            Session session = new Session(socket.accept());
-            session.start();
+            AtomicBoolean running = new AtomicBoolean(true);
+            while (running.get())
+            {
+                Session session = new Session(socket.accept(), db, running);
+                session.start();
+                session.join();
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error starting server: " + e.getMessage());
+        } catch (InterruptedException e) {
+            System.err.println("Server interrupted: " + e.getMessage());
         }
     }
 }

@@ -50,6 +50,25 @@ Make your server functional and add the option to exit the program.
 
 #### _Description_
 
+Now that we have communication between the client and server, let's build upon the functionality from the first stage.
+The server should be able to receive messages with the operations `get`, `set`, and `delete`, each with an index of the
+cell.
+
+For now, there is no need to save the database to a file on the hard drive, so if the server reboots, all the data in
+the database will be lost. The server should serve one client at a time in a loop, and the client should only send 
+one request to the server, get one reply, and exit. After that, the server should wait for another connection from a 
+client.
+
+To send a request to the server, the client should get all the information through command-line arguments in the 
+following format (there is a useful library called `JCommander` to help parsing the arguments): 
+
+`java Main -t <type> -i <index> [-m <message>]`
+- `-t` is the type of the request
+- `-i` is the index of the cell
+- `-m` is the value/message to save in the database (only needed for `set` requests)
+
+---
+
 ### Stage 4: [Start work with JSON](https://hyperskill.org/projects/65/stages/351/implement)
 
 #### _Summary_
