@@ -4,12 +4,17 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Session extends Thread {
     private final Socket socket;
+    private final DatabaseArray databaseArray;
+    private final AtomicBoolean running;
 
-    public Session(Socket socket) {
+    public Session(Socket socket, DatabaseArray databaseArray, AtomicBoolean running) {
         this.socket = socket;
+        this.databaseArray = databaseArray;
+        this.running = running;
     }
 
     public void run() {
@@ -17,15 +22,15 @@ public class Session extends Thread {
                 DataInputStream input = new DataInputStream(socket.getInputStream());
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream())
         ) {
-            String msg = input.readUTF();
-            System.out.println("Received: " + msg);
-            String index = msg.substring(msg.indexOf("#") + 2);
-            String response = "A record # " + index + " was sent!";
-            output.writeUTF(response);
-            System.out.println("Sent: " + response);
+            String command = input.readUTF();
+            if (command.equals("exit")) {
+                running.set(false);
+            } else {
+                output.writeUTF(databaseArray.parseCommandLine(command));
+            }
             socket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error reading from socket: " + e.getMessage());
         }
     }
 }
