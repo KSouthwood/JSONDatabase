@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Main {
+public class Main implements Runnable{
     private final static int SERVER_PORT = 23456;
 
     public static void main(String[] args) {
+        new Main().run();
+    }
+
+    @Override
+    public void run() {
         DatabaseArray db = new DatabaseArray();
         try (ServerSocket socket = new ServerSocket(SERVER_PORT)) {
             System.out.println("Server started!");

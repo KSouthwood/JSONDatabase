@@ -55,14 +55,15 @@ The server should be able to receive messages with the operations `get`, `set`, 
 cell.
 
 For now, there is no need to save the database to a file on the hard drive, so if the server reboots, all the data in
-the database will be lost. The server should serve one client at a time in a loop, and the client should only send 
-one request to the server, get one reply, and exit. After that, the server should wait for another connection from a 
+the database will be lost. The server should serve one client at a time in a loop, and the client should only send
+one request to the server, get one reply, and exit. After that, the server should wait for another connection from a
 client.
 
-To send a request to the server, the client should get all the information through command-line arguments in the 
-following format (there is a useful library called `JCommander` to help parsing the arguments): 
+To send a request to the server, the client should get all the information through command-line arguments in the
+following format (there is a useful library called `JCommander` to help parsing the arguments):
 
 `java Main -t <type> -i <index> [-m <message>]`
+
 - `-t` is the type of the request
 - `-i` is the index of the cell
 - `-m` is the value/message to save in the database (only needed for `set` requests)
@@ -76,6 +77,22 @@ following format (there is a useful library called `JCommander` to help parsing 
 Convert requests and responses to JSON format.
 
 #### _Description_
+
+In this stage, we will store the database in JSON format. The database will still be in memory and not saved as a file.
+We will use the [GSON library](https://google.github.io/gson/) from Google to work with JSON.
+
+The database will now be stored as Java JSON objects. The keys will now be strings (not limited to integer indexes 
+like the previous stages). We will still use command-line arguments, but the client will have to send JSON to the 
+server and receive JSON from the server. Similarly, the server should process the received JSON and respond with JSON.
+
+The command-line format will now be as follows:
+`java Main -t <type> -k <key> [-v <value>]`
+
+- `-t` specifies the type of the request (`get`, `set`, or `delete`)
+- `-k` specifies the key
+- `-v` specifies the value (only needed for `set` requests)
+
+---
 
 ### Stage 5: [Manage mulitple requests](https://hyperskill.org/projects/65/stages/352/implement)
 
