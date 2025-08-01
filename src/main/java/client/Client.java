@@ -1,6 +1,8 @@
 package client;
 
-import com.beust.jcommander.Parameter;
+import model.Args;
+
+import com.google.gson.Gson;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,19 +14,12 @@ import java.net.UnknownHostException;
 public class Client {
     private final String address;
     private final int    port;
+    private final Args   args;
 
-    @Parameter(names = "-t", description = "Request type (get, set, delete, exit)")
-    private String request = "";
-
-    @Parameter(names = "-i", description = "Index of the record to operate on")
-    private String index = "";
-
-    @Parameter(names = "-m", description = "Message to store on the server")
-    private String message = "";
-
-    public Client(String address, int port) {
+    public Client(String address, int port, Args args) {
         this.address = address;
         this.port = port;
+        this.args = args;
     }
 
     public void connect() {
@@ -33,7 +28,7 @@ public class Client {
              DataOutputStream output = new DataOutputStream(socket.getOutputStream())
         ) {
             System.out.println("Client started!");
-            String commandLine = String.join(" ", request, index, message);
+            String commandLine = new Gson().toJson(args);
             output.writeUTF(commandLine);
             System.out.println("Sent: " + commandLine);
             String receivedFromServer = input.readUTF();
