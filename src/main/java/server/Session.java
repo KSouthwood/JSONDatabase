@@ -1,5 +1,8 @@
 package server;
 
+import com.google.gson.Gson;
+import model.Args;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -23,8 +26,10 @@ public class Session extends Thread {
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream())
         ) {
             String command = input.readUTF();
-            output.writeUTF(databaseArray.parseCommandLine(command));
-            if (command.equals("exit")) {
+            var commandArgs = new Gson().fromJson(command, Args.class);
+            var response = databaseArray.processClientRequest(commandArgs);
+            output.writeUTF(new Gson().toJson(response));
+            if (commandArgs.request().equals("exit")) {
                 running.set(false);
             }
             socket.close();
