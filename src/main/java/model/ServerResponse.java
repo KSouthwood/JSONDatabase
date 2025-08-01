@@ -22,4 +22,18 @@ public class ServerResponse {
         this.value = value;
         return this;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("{");
+        sb.append("\"response\":\"").append(response).append("\"");
+        if (reason != null) {
+            sb.append(",\"reason\":\"").append(reason).append("\"");
+        }
+        if (value != null) {
+            sb.append(",\"value\":\"").append(value).append("\"");
+        }
+        sb.append("}");
+        return sb.toString();
+    }
 }

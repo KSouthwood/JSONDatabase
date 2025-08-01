@@ -23,4 +23,18 @@ public class Args {
     public String value() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("{");
+        sb.append("\"type\":\"").append(type).append("\"");
+        if (key != null) {
+            sb.append(",\"key\":\"").append(key).append("\"");
+        }
+        if (value != null) {
+            sb.append(",\"value\":\"").append(value).append("\"");
+        }
+        sb.append("}");
+        return sb.toString();
+    }
 }
