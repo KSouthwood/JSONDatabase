@@ -1,18 +1,9 @@
 package client;
 
+import com.google.gson.Gson;
 import model.Args;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.FileReader;
-import java.io.Reader;
-import java.lang.reflect.Type;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -69,9 +60,8 @@ public class Client {
             return new String[0];
         }
         try (Reader reader = new FileReader(file)) {
-            Type type = new TypeToken<String[]>() {
-            }.getType();
-            return new Gson().fromJson(reader, type);
+            Args args = new Gson().fromJson(reader, Args.class);
+            return new String[]{new Gson().toJson(args)};
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
             return new String[0];
