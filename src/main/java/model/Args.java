@@ -12,7 +12,7 @@ public class Args {
     @Parameter(names = "-v", description = "Value")
     private String value = null;
 
-    @Parameter(names = "-in, --file",
+    @Parameter(names = {"-in", "--file"},
                description = "File to read JSON requests from. If this is specified, any other option(s) will be ignored.")
     private String filename = null;
 
