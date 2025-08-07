@@ -94,13 +94,34 @@ The command-line format will now be as follows:
 
 ---
 
-### Stage 5: [Manage mulitple requests](https://hyperskill.org/projects/65/stages/352/implement)
+### Stage 5: [Manage multiple requests](https://hyperskill.org/projects/65/stages/352/implement)
 
 #### _Summary_
 
 Allow your server to handle multiple requests at the same time.
 
 #### _Description_
+
+For this stage, we will improve the client and server by adding the ability to work with files. The server should
+store (persist) the database as a file on the hard drive, updating it only when setting a new  value or deleting one.
+This functionality is crucial for maintaining data persistence and ensuring that the database state is saved even if
+the server is restarted.
+
+We will also parallelize the server's work using executors to handle multiple requests efficiently. Each request  
+will be parsed and handled in a separate executor's task which will enhance the performance and scalability so it
+can handle a higher load.
+
+Implementing synchronization is essential to maintain the integrity of the database when multiple threads access the
+same file. Using the `ReentrantReadWriteLock` class, we can allow multiple threads to read the file concurrently
+while ensuring that only one thread can write to the file at a time. This will prevent data corruption and ensure
+consistent access to the database.
+
+Also, we will implement the ability for the client to read a request from a file. If the `-in` argument is followed
+by a file name, the client should read the request from that file. The file will be stored in the `/client/data`
+directory. This feature allows the client to directly send pre-formatted JSON requests to the server, bypassing the
+need to first convert command-line arguments into JSON format and then send that JSON to the server.
+
+---
 
 ### Stage 6: [Store JSON objects in your database](https://hyperskill.org/projects/65/stages/353/implement)
 

@@ -7,20 +7,19 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.Callable;
 
-public class Session extends Thread {
+public class Session implements Callable<Boolean> {
     private final Socket socket;
     private final DatabaseArray databaseArray;
-    private final AtomicBoolean running;
 
-    public Session(Socket socket, DatabaseArray databaseArray, AtomicBoolean running) {
+    public Session(Socket socket, DatabaseArray databaseArray) {
         this.socket = socket;
         this.databaseArray = databaseArray;
-        this.running = running;
     }
 
-    public void run() {
+    @Override
+    public Boolean call() {
         try (
                 DataInputStream input = new DataInputStream(socket.getInputStream());
                 DataOutputStream output = new DataOutputStream(socket.getOutputStream())
@@ -29,12 +28,13 @@ public class Session extends Thread {
             var commandArgs = new Gson().fromJson(command, Args.class);
             var response = databaseArray.processClientRequest(commandArgs);
             output.writeUTF(new Gson().toJson(response));
-            if (commandArgs.request().equals("exit")) {
-                running.set(false);
-            }
             socket.close();
+            if (commandArgs.request().equals("exit")) {
+                return false;
+            }
         } catch (IOException e) {
             System.err.println("Error reading from socket: " + e.getMessage());
         }
+        return true;
     }
 }

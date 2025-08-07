@@ -12,6 +12,10 @@ public class Args {
     @Parameter(names = "-v", description = "Value")
     private String value = null;
 
+    @Parameter(names = {"-in", "--file"},
+               description = "File to read JSON requests from. If this is specified, any other option(s) will be ignored.")
+    private String filename = null;
+
     public String request() {
         return type;
     }
@@ -22,6 +26,10 @@ public class Args {
 
     public String value() {
         return value;
+    }
+
+    public String filename() {
+        return filename;
     }
 
     @Override
